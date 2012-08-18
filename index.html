@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>TetrisJS</title>
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+	<div class="backboard">
+		<canvas id="piece" width="480" height="600" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
+		<canvas id="board" width="480" height="600" style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+	</div>
+
+	<div class="controls">
+		<a id="start" class="game-button firsties">Start Game</a>
+		<a id="pause" class="game-button disabled">Pause Game</a>
+		<a id="options" class="game-button">Options</a>
+	</div>
+
+	<img class="logo" src="images/LogoType.png">
+
+	<ul class="instuctions">
+		<li><span class="action">Move</span> - Arrow Keys</li>
+		<li><span class="action">Rotate</span> - , and .</li>
+	</ul>
+
+</div>
+
+<script src="scripts/jquery-1.7.min.js"></script>
+<script src="scripts/tetris.js"></script>
+
+</body>
+</html>
