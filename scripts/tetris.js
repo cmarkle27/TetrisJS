@@ -1,4 +1,4 @@
-(function() {
+define(function() {
 
 	var pieceContext = document.getElementById("piece").getContext("2d"),
 		boardContext = document.getElementById("board").getContext("2d"),
@@ -167,14 +167,16 @@
 		this.orientation = 0;
 		this.depth = -4;
 		this.position = 5;
+
+		this.boardWidth = 480; // settings
+		this.boardHeight = 600; // settings
+		this.tileSize = 40; // settings
+
 		this.shape = this.randomShape();
 		this.color = this.getColor(this.shape);
 		this.tileImage = tileImage; // global
 		tileImage.src = "images/tile.png";
 	};
-
-	Tetrimino.prototype = new GameBoard();
-	Tetrimino.prototype.constructor = Tetrimino;
 
 	Tetrimino.prototype.randomShape = function() {
 		var shapeArray = ["j", "o", "i", "l", "s", "z", "t"];
@@ -235,6 +237,7 @@
 		return colors[shape];
 	};
 
+	// this render could live outside???
 	Tetrimino.prototype.render = function() {
 		var that = this,
 			shape = that.getShape(that.shape),
@@ -245,6 +248,7 @@
 
 		// global
 		pieceContext.clearRect(0, 0, that.boardWidth, that.boardHeight);
+		// this.clearContext()???
 
 		for (var i = 0; i < 4; i++) {
 			xCoord = (x[i]*that.tileSize) + (that.position*that.tileSize);
@@ -330,8 +334,7 @@
 	// --------------------------------------------------------------------
 	// on ready
 	gameBoard = new GameBoard();
-	gameBoard.init();
 
 	// --------------------------------------------------------------------
 
-})();
+});
