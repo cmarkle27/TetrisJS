@@ -83,11 +83,10 @@ define("Tetrimino", function() {
 
 		var thisShape = this.getShape(this.shape);
 
-		// add the depth and position too!!!
-
 		return {
-			"x" : thisShape[this.orientation]["x"],
-			"y" : thisShape[this.orientation]["y"]
+			"x" : parseInt(thisShape[this.orientation]["x"], 10) + this.position,
+			"y" : parseInt(thisShape[this.orientation]["y"], 10) + this.depth,
+			"color" : this.color
 		};
 
 	};

@@ -27,30 +27,22 @@ define("Canvas", function() {
 
 	Canvas.prototype.renderBlocks = function(blocks) {
 
-		// blocks should be an array of x,y coords
 		var context = this.context,
-			x, y, xCoord, yCoord;
+			blockLength = blocks["x"].length;
 
-
-		console.log("left off here");
-
-		///////////////////////////////
-		/// this needs work!!!
-		// we should just get the x and y with pos & depth alradt added
-
-		x = block["x"],
-		y = block["y"],
-
-		// global
 		this.clear();
 
-		for (var i = 0; i < 4; i++) {
-			xCoord = (x[i]*tileSize) + (that.position*tileSize);
-			yCoord = (y[i]*tileSize) + (that.depth*tileSize);
+		for (var i = 0; i < blockLength; i++) {
+
+			xCoord = blocks["x"][i]*tileSize;
+			yCoord = blocks["y"][i]*tileSize;
+
+			console.log(yCoord);
+
 			// globals
 			context.beginPath();
 			context.rect(xCoord, yCoord, tileSize, tileSize);
-			context.fillStyle = that.color;
+			context.fillStyle = blocks["color"][i];
 			context.fill();
 			context.drawImage(tileImage, xCoord, yCoord, tileSize, tileSize); // global in here
 		}

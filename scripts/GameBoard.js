@@ -5,9 +5,9 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 	// --------------------------------------------------------------------
 
     function GameBoard(boardContext, pieceContext) {
-		this.boardCanvas = new Canvas(boardContext);
-		this.pieceCanvas = new Canvas(pieceContext);
-		this.speed = 700; // setting???
+		this.boardCanvas = new Canvas(boardContext); // vars???
+		this.pieceCanvas = new Canvas(pieceContext); // vars???
+		this.speed = 700; // settings???
 		this.paused = true;
 		this.blocks = [];
 		this.loop();
@@ -27,7 +27,19 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 	GameBoard.prototype.createPiece = function() {
 		// we really need to create two pieces, so that we can show the user whats on deck!!!
 		this.currentPiece = new Tetrimino();
-		this.pieceCanvas.renderBlocks(this.currentPiece);
+		this.drawCurrentPiece();
+	};
+
+	// ------------------------------------------------------------------------
+
+	GameBoard.prototype.drawCurrentPiece = function() { // should this live in Tetrimino???
+
+		var piece = this.currentPiece,
+			blocks = piece.getCoordinates();
+
+			console.log(blocks);
+
+		this.pieceCanvas.renderBlocks(blocks);
 	};
 
 	// ------------------------------------------------------------------------
@@ -64,7 +76,7 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 			this.currentPiece.position = piecePosition;
 			this.currentPiece.depth = pieceDepth;
 			this.currentPiece.orientation = pieceOrientation;
-			this.pieceCanvas.render(this.currentPiece);
+			this.drawCurrentPiece();
 		} else if (direction === "down") {
 			// add the current piece to the board array!!!
 			this.addPiece(this.currentPiece);
@@ -103,7 +115,7 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 
 			// hit blocks
 			//hits += this.hitCheck(xCoord, yCoord);
-			console.log(xCoord, yCoord);
+			//console.log(xCoord, yCoord);
 
 		}
 
