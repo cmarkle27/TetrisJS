@@ -83,6 +83,12 @@ define("Tetrimino", function() {
 
 		var thisShape = this.getShape(this.shape);
 
+		//////////////////////
+		/////
+		console.log("left off here");
+
+		/// need to get each coord instead of smashing into a single number, oops!
+
 		return {
 			"x" : parseInt(thisShape[this.orientation]["x"], 10) + this.position,
 			"y" : parseInt(thisShape[this.orientation]["y"], 10) + this.depth,
