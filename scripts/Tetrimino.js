@@ -10,6 +10,7 @@ define("Tetrimino", function() {
 		this.position = 5;
 		this.shape = this.randomShape();
 		this.color = this.getColor();
+		//...
 	};
 
 	// ------------------------------------------------------------------------
