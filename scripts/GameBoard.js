@@ -1,24 +1,29 @@
 define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 
+	// static vars
+	var boardCanvas;
+	var pieceCanvas;
+
 	// --------------------------------------------------------------------
 	// GameBoard constructor
 	// --------------------------------------------------------------------
 
     function GameBoard(boardContext, pieceContext) {
-		this.boardCanvas = new Canvas(boardContext); // vars???
-		this.pieceCanvas = new Canvas(pieceContext); // vars???
-		this.speed = 700; // settings???
+		boardCanvas = new Canvas(boardContext);
+		pieceCanvas = new Canvas(pieceContext);
+		this.speed = 700; // setting
 		this.paused = true;
 		this.blocks = [];
+		this.currentPiece = "";
 		this.loop();
 	}
 
 	// ------------------------------------------------------------------------
 
 	GameBoard.prototype.startGame = function() {
-		this.boardCanvas.clear();
-		this.pieceCanvas.clear();
-		this.currentPiece = "";
+		boardCanvas.clear();
+		pieceCanvas.clear();
+		//this.currentPiece = "";
 		this.paused = false;
 	};
 
@@ -27,19 +32,15 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 	GameBoard.prototype.createPiece = function() {
 		// we really need to create two pieces, so that we can show the user whats on deck!!!
 		this.currentPiece = new Tetrimino();
+		//debugger;
 		this.drawCurrentPiece();
 	};
 
 	// ------------------------------------------------------------------------
 
-	GameBoard.prototype.drawCurrentPiece = function() { // should this live in Tetrimino???
-
-		var piece = this.currentPiece,
-			blocks = piece.getCoordinates();
-
-			console.log(blocks);
-
-		this.pieceCanvas.renderBlocks(blocks);
+	GameBoard.prototype.drawCurrentPiece = function() {
+		var blocks = this.currentPiece.getBlocks();
+		pieceCanvas.renderBlocks(blocks);
 	};
 
 	// ------------------------------------------------------------------------
@@ -49,7 +50,7 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 		var piecePosition = this.currentPiece.position,
 			pieceDepth = this.currentPiece.depth,
 			pieceOrientation = this.currentPiece.orientation,
-			pieceRotations = this.currentPiece.getShape(this.currentPiece.shape).length;
+			pieceRotations = this.currentPiece.getShape().length;
 
 		// move the piece
 		if (direction === "left") {
@@ -92,7 +93,7 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 	GameBoard.prototype.checkMove = function(position, depth, orientation) {
 
 		var piece = this.currentPiece,
-			shape = piece.getShape(piece.shape),
+			shape = piece.getShape(),
 			hits = 0,
 			x = shape[orientation]["x"],
 			y = shape[orientation]["y"],

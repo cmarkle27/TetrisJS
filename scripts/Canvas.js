@@ -7,7 +7,7 @@ define("Canvas", function() {
 
 	// ------------------------------------------------------------------------
 
-	tileImage.src = "images/tile.png"; // preload tile image
+	tileImage.src = "images/tile.png"; // preload tile image???
 
 	// --------------------------------------------------------------------
 	// Canvas constructor
@@ -28,7 +28,8 @@ define("Canvas", function() {
 	Canvas.prototype.renderBlocks = function(blocks) {
 
 		var context = this.context,
-			blockLength = blocks["x"].length;
+			blockLength = blocks["x"].length,
+			xCoord, yCoord;
 
 		this.clear();
 
@@ -37,12 +38,9 @@ define("Canvas", function() {
 			xCoord = blocks["x"][i]*tileSize;
 			yCoord = blocks["y"][i]*tileSize;
 
-			console.log(yCoord);
-
-			// globals
 			context.beginPath();
 			context.rect(xCoord, yCoord, tileSize, tileSize);
-			context.fillStyle = blocks["color"][i];
+			context.fillStyle = blocks["color"];
 			context.fill();
 			context.drawImage(tileImage, xCoord, yCoord, tileSize, tileSize); // global in here
 		}

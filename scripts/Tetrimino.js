@@ -4,13 +4,13 @@ define("Tetrimino", function() {
 	// Tetrimino constructor
 	// --------------------------------------------------------------------
 
-	function Tetrimino() {
+	var Tetrimino = function() {
 		this.orientation = 0;
 		this.depth = -4;
 		this.position = 5;
 		this.shape = this.randomShape();
-		this.color = this.getColor(this.shape);
-	}
+		this.color = this.getColor();
+	};
 
 	// ------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ define("Tetrimino", function() {
 
 	// ------------------------------------------------------------------------
 
-	Tetrimino.prototype.getShape = function(shape) {
+	Tetrimino.prototype.getShape = function() {
 		var shapeList = {
 			j : [
 				{ "x" : [0, 1, 1, 1], "y" : [2, 2, 1, 0] },
@@ -57,12 +57,12 @@ define("Tetrimino", function() {
 				{ "x" : [0, 1, 2, 1], "y" : [0, 1, 0, 0] }
 			]
 		};
-		return shapeList[shape];
+		return shapeList[this.shape];
 	};
 
 	// ------------------------------------------------------------------------
 
-	Tetrimino.prototype.getColor = function(shape) {
+	Tetrimino.prototype.getColor = function() {
 
 		var colors = {
 			j: "#cc0000",
@@ -74,24 +74,25 @@ define("Tetrimino", function() {
 			t: "#339900"
 		};
 
-		return colors[shape];
+		return colors[this.shape];
 	};
 
 	// ------------------------------------------------------------------------
 
-	Tetrimino.prototype.getCoordinates = function() {
+	Tetrimino.prototype.getBlocks = function() {
 
-		var thisShape = this.getShape(this.shape);
+		var shape = this.getShape(),
+			xPoints = shape[this.orientation]["x"],
+			yPoints = shape[this.orientation]["y"];
 
-		//////////////////////
-		/////
-		console.log("left off here");
-
-		/// need to get each coord instead of smashing into a single number, oops!
+		for (var i = 0; i < 4; i++) {
+			xPoints[i] += this.position;
+			yPoints[i] += this.depth;
+		}
 
 		return {
-			"x" : parseInt(thisShape[this.orientation]["x"], 10) + this.position,
-			"y" : parseInt(thisShape[this.orientation]["y"], 10) + this.depth,
+			"x" : xPoints,
+			"y" : yPoints,
 			"color" : this.color
 		};
 
