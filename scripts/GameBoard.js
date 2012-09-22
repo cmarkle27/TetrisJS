@@ -1,175 +1,183 @@
 define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 
-	// static vars
-	var boardCanvas;
-	var pieceCanvas;
-
-	// --------------------------------------------------------------------
-	// GameBoard constructor
-	// --------------------------------------------------------------------
+        // --------------------------------------------------------------------
+        // GameBoard constructor
+        // --------------------------------------------------------------------
 
     function GameBoard(boardContext, pieceContext) {
-		boardCanvas = new Canvas(boardContext);
-		pieceCanvas = new Canvas(pieceContext);
-		this.speed = 700; // setting
-		this.paused = true;
-		this.blocks = [];
-		this.currentPiece = "";
-		this.loop();
-	}
+ext) {
+         this.boardCanvas = new Canvas(boardContext); // vars???
+ars???
+         this.pieceCanvas = new Canvas(pieceContext); // vars???
+ars???
+         this.speed = 700; // settings???
+                this.paused = true;
+                this.blocks = [];
+                this.loop();
+        }
 
-	// ------------------------------------------------------------------------
+        // ------------------------------------------------------------------------
 
-	GameBoard.prototype.startGame = function() {
-		boardCanvas.clear();
-		pieceCanvas.clear();
-		//this.currentPiece = "";
-		this.paused = false;
-	};
+        GameBoard.prototype.startGame = function() {
+                this.boardCanvas.clear();
+                this.pieceCanvas.clear();
+                this.currentPiece = "";
+                this.paused = false;
+        };
 
-	// ------------------------------------------------------------------------
+        // ------------------------------------------------------------------------
 
-	GameBoard.prototype.createPiece = function() {
-		// we really need to create two pieces, so that we can show the user whats on deck!!!
-		this.currentPiece = new Tetrimino();
-		//debugger;
-		this.drawCurrentPiece();
-	};
+        GameBoard.prototype.createPiece = function() {
+                // we really need to create two pieces, so that we can show the user whats on deck!!!
+                this.currentPiece = new Tetrimino();
+is.currentPiece = new Tetrimino();
+ce();
+rentPiece = new Tetrimino();
+ce();
+rentPiece = ------------------------------------------------
+----------------------------------
+-rentPiece = function() { // should this live in Tetrimino???
+/ should this live in Tetrimino???
+/rrentPiece,
+ live in Tetrimino???
+/rrentPiece,
+ece.getCoordinates();
+/rrentPiece,
+ece.getCoordinates();
+/(blocks);
+,
+ece.getCoordinates();
+/(blocks);
+,nderBlocks(blocks);
+        };
 
-	// ------------------------------------------------------------------------
+        // ------------------------------------------------------------------------
 
-	GameBoard.prototype.drawCurrentPiece = function() {
-		var blocks = this.currentPiece.getBlocks();
-		pieceCanvas.renderBlocks(blocks);
-	};
+        GameBoard.prototype.movePiece = function(direction) {
 
-	// ------------------------------------------------------------------------
+                var piecePosition = this.currentPiece.position,
+                        pieceDepth = this.currentPiece.depth,
+                        pieceOrientation = this.currentPiece.orientation,
+                        pieceRotations = this.currentPiece.getShape(this.currentPiece.shape).length;
 
-	GameBoard.prototype.movePiece = function(direction) {
+                // move the piece
+                if (direction === "left") {
+                        piecePosition -= 1;
+                } else if (direction === "right") {
+                        piecePosition += 1;
+                } else if (direction === "down") {
+                        pieceDepth += 1;
+                } else if (direction === "clockwise") {
+                        pieceOrientation += 1;
+                } else if (direction === "counterclockwise") {
+                        pieceOrientation -= 1;
+                }
 
-		var piecePosition = this.currentPiece.position,
-			pieceDepth = this.currentPiece.depth,
-			pieceOrientation = this.currentPiece.orientation,
-			pieceRotations = this.currentPiece.getShape().length;
+                // check for overrotatation
+                if (pieceOrientation === pieceRotations) {
+                        pieceOrientation = 0;
+                } else if (pieceOrientation < 0) {
+                        pieceOrientation = (pieceRotations -1);
+                }
 
-		// move the piece
-		if (direction === "left") {
-			piecePosition -= 1;
-		} else if (direction === "right") {
-			piecePosition += 1;
-		} else if (direction === "down") {
-			pieceDepth += 1;
-		} else if (direction === "clockwise") {
-			pieceOrientation += 1;
-		} else if (direction === "counterclockwise") {
-			pieceOrientation -= 1;
-		}
+                // check our new location
+                if ( this.checkMove(piecePosition, pieceDepth, pieceOrientation) ) {
+                        this.currentPiece.position = piecePosition;
+                        this.currentPiece.depth = pieceDepth;
+                        this.currentPiece.orientation = pieceOrientation;
+             this.currentPiece.orientation = piec                } else if (direction === "down") {
+                        // add the current piece to the board array!!!
+                        this.addPiece(this.currentPiece);
+                        // delete it
+                        //this.currentPiece = "";
+                        this.createPiece();
+                }
 
-		// check for overrotatation
-		if (pieceOrientation === pieceRotations) {
-			pieceOrientation = 0;
-		} else if (pieceOrientation < 0) {
-			pieceOrientation = (pieceRotations -1);
-		}
+        };
 
-		// check our new location
-		if ( this.checkMove(piecePosition, pieceDepth, pieceOrientation) ) {
-			this.currentPiece.position = piecePosition;
-			this.currentPiece.depth = pieceDepth;
-			this.currentPiece.orientation = pieceOrientation;
-			this.drawCurrentPiece();
-		} else if (direction === "down") {
-			// add the current piece to the board array!!!
-			this.addPiece(this.currentPiece);
-			// delete it
-			//this.currentPiece = "";
-			this.createPiece();
-		}
+        // ------------------------------------------------------------------------
 
-	};
+        GameBoard.prototype.checkMove = function(position, depth, orientation) {
 
-	// ------------------------------------------------------------------------
+                var piece = this.currentPiece,
+                        shape = piece.getShape(piece.shape),
+                        hits = 0,
+                        x = shape[orientation]["x"],
+                        y = shape[orientation]["y"],
+                        xCoord,
+                        yCoord;
 
-	GameBoard.prototype.checkMove = function(position, depth, orientation) {
+                for (i = 0; i < 4; i++) {
+                        xCoord = x[i] + position;
+                        yCoord = y[i] + depth;
 
-		var piece = this.currentPiece,
-			shape = piece.getShape(),
-			hits = 0,
-			x = shape[orientation]["x"],
-			y = shape[orientation]["y"],
-			xCoord,
-			yCoord;
+                        // hit wall
+                        if (xCoord === (this.boardWidth/this.tileSize) || xCoord < 0) {
+                                hits += 1;
+                        }
 
-		for (i = 0; i < 4; i++) {
-			xCoord = x[i] + position;
-			yCoord = y[i] + depth;
+                        // hit floor
+                        if (yCoord === (this.boardHeight/this.tileSize)) {
+                                hits += 1;
+                        }
 
-			// hit wall
-			if (xCoord === (this.boardWidth/this.tileSize) || xCoord < 0) {
-				hits += 1;
-			}
+                        // hit blocks
+                        //hits += this.hitCheck(xCoord, yCoord);
+ //hits += this.hitCheck(xCoord, yCoord);
+rd, yCoord);
 
-			// hit floor
-			if (yCoord === (this.boardHeight/this.tileSize)) {
-				hits += 1;
-			}
+                }
 
-			// hit blocks
-			//hits += this.hitCheck(xCoord, yCoord);
-			//console.log(xCoord, yCoord);
+                if (hits > 0) {
+                        return false;
+                }
 
-		}
+                return true;
+        };
 
-		if (hits > 0) {
-			return false;
-		}
+        // ------------------------------------------------------------------------
 
-		return true;
-	};
-
-	// ------------------------------------------------------------------------
-
-	GameBoard.prototype.addPiece = function(piece) {
-		console.log("the eagle has landed!");
-		console.log(piece);
+        GameBoard.prototype.addPiece = function(piece) {
+                console.log("the eagle has landed!");
+                console.log(piece);
 
 
 
-		//debugger;
-		// for each block in piece
+                //debugger;
+                // for each block in piece
 /*		this.blocks.push({
-			x: tetriminoBlocks.x[i]+tetrimino.position,
-			y: tetriminoBlocks.y[i]+tetrimino.depth,
-			color: tetrimino.color
-		});*/
-	};
+                        x: tetriminoBlocks.x[i]+tetrimino.position,
+                        y: tetriminoBlocks.y[i]+tetrimino.depth,
+                        color: tetrimino.color
+                });*/
+        };
 
-	// ------------------------------------------------------------------------
+        // ------------------------------------------------------------------------
 
-	GameBoard.prototype.loop = function() {
+        GameBoard.prototype.loop = function() {
 
-		var that = this;
+                var that = this;
 
-		if (that.paused === false) {
+                if (that.paused === false) {
 
-			if (that.currentPiece === "") {
-				that.createPiece();
-			}
+                        if (that.currentPiece === "") {
+                                that.createPiece();
+                        }
 
-			that.movePiece("down");
-			console.log("weee!!!");
-		}
+                        that.movePiece("down");
+                        console.log("weee!!!");
+                }
 
-		setTimeout(function() {
-			console.log("tick");
-			that.loop();
-		}, that.speed);
+                setTimeout(function() {
+                        console.log("tick");
+                        that.loop();
+                }, that.speed);
 
-	};
+        };
 
 
-	// ------------------------------------------------------------------------
+        // ------------------------------------------------------------------------
 
-	return GameBoard;
+        return GameBoard;
 
 });
