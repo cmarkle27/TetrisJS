@@ -1,67 +1,53 @@
 define("Canvas", function() {
 
-        var boardWidth = 480,
-                boardHeight = 600,
-                tileSize = 40,
-                tileImage = new Image();
+	var boardWidth = 480,
+		boardHeight = 600,
+		tileSize = 40,
+		tileImage = new Image();
 
-        // ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 
-        tileImage.src = "images/tile.png"; // preload tile image
+	tileImage.src = "images/tile.png"; // preload tile image???
 
-        // --------------------------------------------------------------------
-        // Canvas constructor
-        // --------------------------------------------------------------------
+	// --------------------------------------------------------------------
+	// Canvas constructor
+	// --------------------------------------------------------------------
 
-        function Canvas(ctx) {
-                this.context = ctx; // should we just make this a var???
-        }
+	function Canvas(ctx) {
+		this.context = ctx; // should we just make this a var???
+	}
 
-        // ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 
-        Canvas.prototype.clear = function() {
-                this.context.clearRect(0, 0, boardWidth, boardHeight);
-        };
+	Canvas.prototype.clear = function() {
+		this.context.clearRect(0, 0, boardWidth, boardHeight);
+	};
 
-        // ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 
-        Canvas.prototype.renderBlocks = function(blocks) {
+	Canvas.prototype.renderBlocks = function(blocks) {
 
-                var context = this.context,
-text = this.context,
-   blockLength = blocks["x"].length;
+		var context = this.context,
+			blockLength = blocks["x"].length,
+			xCoord, yCoord;
 
-blocks["x"].length;
+		this.clear();
 
-clear();
+		for (var i = 0; i < blockLength; i++) {
 
-].length;
+			xCoord = blocks["x"][i]*tileSize;
+			yCoord = blocks["y"][i]*tileSize;
 
-clear();
+			context.beginPath();
+			context.rect(xCoord, yCoord, tileSize, tileSize);
+			context.fillStyle = blocks["color"];
+			context.fill();
+			context.drawImage(tileImage, xCoord, yCoord, tileSize, tileSize); // global in here
+		}
 
-var i = 0; i < blockLength; i++) {
-
-blockLength; i++) {
-
-   xCoord = blocks["x"][i]*tileSize;
-ks["x"][i]*tileSize;
-   yCoord = blocks["y"][i]*tileSize;
-
-s["y"][i]*tileSize;
-
-   console.log(yCoord);
-
-                        // globals
-                        context.beginPath();
-                        context.rect(xCoord, yCoord, tileSize, tileSize);
-inPath();
-                        context.rect(xCoord, yCoord, t                        context.fill();
-                        context.drawImage(tileImage, xCoord, yCoord, tileSize, tileSize); // global in here
-                }
-
-        };
+	};
 
 
-        return Canvas;
+	return Canvas;
 
 });

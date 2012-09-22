@@ -168,9 +168,9 @@ define(function() {
 		this.depth = -4;
 		this.position = 5;
 
-                this.boardWidth = 480; // settings
-                this.boardHeight = 600; // settings
-                this.tileSize = 40; // settings
+		this.boardWidth = 480; // settings
+		this.boardHeight = 600; // settings
+		this.tileSize = 40; // settings
 
 		this.shape = this.randomShape();
 		this.color = this.getColor(this.shape);
@@ -237,7 +237,7 @@ define(function() {
 		return colors[shape];
 	};
 
-        // this render could live outside???
+	// this render could live outside???
 	Tetrimino.prototype.render = function() {
 		var that = this,
 			shape = that.getShape(that.shape),
@@ -248,7 +248,7 @@ define(function() {
 
 		// global
 		pieceContext.clearRect(0, 0, that.boardWidth, that.boardHeight);
-                // this.clearContext()???
+		// this.clearContext()???
 
 		for (var i = 0; i < 4; i++) {
 			xCoord = (x[i]*that.tileSize) + (that.position*that.tileSize);
