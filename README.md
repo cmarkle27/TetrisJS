@@ -1,8 +1,8 @@
-== TetrisJS
+#TetrisJS
 
 This is a clone of the classic Tetris game.
 
-=== Authors
+###Authors
 
 * Chris Markle
 
