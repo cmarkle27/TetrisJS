@@ -10,6 +10,7 @@ define("Tetrimino", function() {
 		this.position = 5;
 		this.shape = this.randomShape();
 		this.color = this.getColor();
+		this.tileSize = 40;
 	};
 
 	// ------------------------------------------------------------------------
@@ -17,6 +18,12 @@ define("Tetrimino", function() {
 	Tetrimino.prototype.randomShape = function() {
 		var shapeArray = ["j", "o", "i", "l", "s", "z", "t"];
 		return shapeArray[Math.floor(Math.random() * shapeArray.length)];
+	};
+
+	// ------------------------------------------------------------------------
+
+	Tetrimino.prototype.getTileSize = function() {
+		return this.tileSize;
 	};
 
 	// ------------------------------------------------------------------------

@@ -1,29 +1,29 @@
 define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 
 	// static vars
-	var boardCanvas;
-	var pieceCanvas;
+	var boardWidth = 480;
+	var boardHeight = 600;
+	var boardCanvas, pieceCanvas;
 
 	// --------------------------------------------------------------------
 	// GameBoard constructor
 	// --------------------------------------------------------------------
 
-    function GameBoard(boardContext, pieceContext) {
-		boardCanvas = new Canvas(boardContext);
-		pieceCanvas = new Canvas(pieceContext);
-		this.speed = 700; // setting
+    var GameBoard = function(boardContext, pieceContext) {
+		this.speed = 700;
 		this.paused = true;
 		this.blocks = [];
 		this.currentPiece = "";
+		boardCanvas = new Canvas(boardContext, boardWidth, boardHeight);
+		pieceCanvas = new Canvas(pieceContext, boardWidth, boardHeight);
 		this.loop();
-	}
+	};
 
 	// ------------------------------------------------------------------------
 
 	GameBoard.prototype.startGame = function() {
 		boardCanvas.clear();
 		pieceCanvas.clear();
-		//this.currentPiece = "";
 		this.paused = false;
 	};
 
@@ -32,7 +32,6 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 	GameBoard.prototype.createPiece = function() {
 		// we really need to create two pieces, so that we can show the user whats on deck!!!
 		this.currentPiece = new Tetrimino();
-		//debugger;
 		this.drawCurrentPiece();
 	};
 
@@ -40,17 +39,18 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 
 	GameBoard.prototype.drawCurrentPiece = function() {
 		var blocks = this.currentPiece.getBlocks();
-		pieceCanvas.renderBlocks(blocks);
+		var tileSize = this.currentPiece.getTileSize();
+		pieceCanvas.renderBlocks(blocks, tileSize);
 	};
 
 	// ------------------------------------------------------------------------
 
 	GameBoard.prototype.movePiece = function(direction) {
 
-		var piecePosition = this.currentPiece.position,
-			pieceDepth = this.currentPiece.depth,
-			pieceOrientation = this.currentPiece.orientation,
-			pieceRotations = this.currentPiece.getShape().length;
+		var piecePosition = this.currentPiece.position;
+		var pieceDepth = this.currentPiece.depth;
+		var pieceOrientation = this.currentPiece.orientation;
+		var pieceRotations = this.currentPiece.getShape().length;
 
 		// move the piece
 		if (direction === "left") {
@@ -73,7 +73,7 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 		}
 
 		// check our new location
-		if ( this.checkMove(piecePosition, pieceDepth, pieceOrientation) ) {
+		if (this.checkMove(piecePosition, pieceDepth, pieceOrientation)) {
 			this.currentPiece.position = piecePosition;
 			this.currentPiece.depth = pieceDepth;
 			this.currentPiece.orientation = pieceOrientation;
@@ -81,8 +81,7 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 		} else if (direction === "down") {
 			// add the current piece to the board array!!!
 			this.addPiece(this.currentPiece);
-			// delete it
-			//this.currentPiece = "";
+			this.currentPiece = null;
 			this.createPiece();
 		}
 
@@ -92,25 +91,24 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 
 	GameBoard.prototype.checkMove = function(position, depth, orientation) {
 
-		var piece = this.currentPiece,
-			shape = piece.getShape(),
-			hits = 0,
-			x = shape[orientation]["x"],
-			y = shape[orientation]["y"],
-			xCoord,
-			yCoord;
+		var shape = this.currentPiece.getShape();
+		var hits = 0;
+		var x = shape[orientation]["x"];
+		var y = shape[orientation]["y"];
+		var tileSize = this.currentPiece.getTileSize();
+		var xCoord, yCoord;
 
 		for (i = 0; i < 4; i++) {
 			xCoord = x[i] + position;
 			yCoord = y[i] + depth;
 
 			// hit wall
-			if (xCoord === (this.boardWidth/this.tileSize) || xCoord < 0) {
+			if (xCoord === (boardWidth/tileSize) || xCoord < 0) {
 				hits += 1;
 			}
 
 			// hit floor
-			if (yCoord === (this.boardHeight/this.tileSize)) {
+			if (yCoord === (boardHeight/tileSize)) {
 				hits += 1;
 			}
 
@@ -148,22 +146,22 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 
 	GameBoard.prototype.loop = function() {
 
-		var that = this;
+		var _this = this;
 
-		if (that.paused === false) {
+		if (this.paused === false) {
 
-			if (that.currentPiece === "") {
-				that.createPiece();
+			if (this.currentPiece === "") {
+				this.createPiece();
 			}
 
-			that.movePiece("down");
+			this.movePiece("down");
 			console.log("weee!!!");
 		}
 
 		setTimeout(function() {
 			console.log("tick");
-			that.loop();
-		}, that.speed);
+			_this.loop();
+		}, this.speed);
 
 	};
 

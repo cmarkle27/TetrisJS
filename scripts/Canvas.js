@@ -1,35 +1,31 @@
 define("Canvas", function() {
 
-	var boardWidth = 480,
-		boardHeight = 600,
-		tileSize = 40,
-		tileImage = new Image();
-
-	// ------------------------------------------------------------------------
-
-	tileImage.src = "images/tile.png"; // preload tile image???
+	var tileImage = new Image();
+	tileImage.src = "images/tile.png"; // preload tile image
 
 	// --------------------------------------------------------------------
 	// Canvas constructor
 	// --------------------------------------------------------------------
 
-	function Canvas(ctx) {
-		this.context = ctx; // should we just make this a var???
-	}
-
-	// ------------------------------------------------------------------------
-
-	Canvas.prototype.clear = function() {
-		this.context.clearRect(0, 0, boardWidth, boardHeight);
+	var Canvas = function(ctx, width, height) {
+		this.context = ctx;
+		this.canvasWidth = width;
+		this.canvasHeight = height;
 	};
 
 	// ------------------------------------------------------------------------
 
-	Canvas.prototype.renderBlocks = function(blocks) {
+	Canvas.prototype.clear = function() {
+		this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+	};
 
-		var context = this.context,
-			blockLength = blocks["x"].length,
-			xCoord, yCoord;
+	// ------------------------------------------------------------------------
+
+	Canvas.prototype.renderBlocks = function(blocks, tileSize) {
+
+		var context = this.context;
+		var blockLength = blocks["x"].length;
+		var xCoord, yCoord;
 
 		this.clear();
 
@@ -47,6 +43,7 @@ define("Canvas", function() {
 
 	};
 
+	// ------------------------------------------------------------------------
 
 	return Canvas;
 
