@@ -30,7 +30,6 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 	// ------------------------------------------------------------------------
 
 	GameBoard.prototype.dropPiece = function(action) {
-		console.log("d");
 		if (action === "start") {
 			this.speed = 70;
 		} else {
