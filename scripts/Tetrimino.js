@@ -9,7 +9,7 @@ define("Tetrimino", function() {
 		this.depth = -4;
 		this.position = 5;
 		this.shape = this.randomShape();
-		this.color = this.getColor();
+		this.tileColor = this.getColor();
 		this.tileSize = 40;
 	};
 
@@ -21,10 +21,6 @@ define("Tetrimino", function() {
 	};
 
 	// ------------------------------------------------------------------------
-
-	Tetrimino.prototype.getTileSize = function() {
-		return this.tileSize;
-	};
 
 	// ------------------------------------------------------------------------
 
@@ -88,19 +84,18 @@ define("Tetrimino", function() {
 
 	Tetrimino.prototype.getBlocks = function() {
 
-		var shape = this.getShape(),
-			xPoints = shape[this.orientation]["x"],
-			yPoints = shape[this.orientation]["y"];
+		var shape = this.getShape();
+		var xPoints = shape[this.orientation].x;
+		var yPoints = shape[this.orientation].y;
 
-		for (var i = 0; i < 4; i++) {
+		for (var i = 4; i--;) {
 			xPoints[i] += this.position;
 			yPoints[i] += this.depth;
 		}
 
 		return {
 			"x" : xPoints,
-			"y" : yPoints,
-			"color" : this.color
+			"y" : yPoints
 		};
 
 	};

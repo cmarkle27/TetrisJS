@@ -21,25 +21,19 @@ define("Canvas", function() {
 
 	// ------------------------------------------------------------------------
 
-	Canvas.prototype.renderBlocks = function(blocks, tileSize) {
+	Canvas.prototype.renderTile = function(tile) {
 
 		var context = this.context;
-		var blockLength = blocks["x"].length;
-		var xCoord, yCoord;
+		var tileSize = tile.size;
+		var xCoord = tile.x * tileSize;
+		var yCoord = tile.y * tileSize;
+		var color = tile.color;
 
-		this.clear();
-
-		for (var i = 0; i < blockLength; i++) {
-
-			xCoord = blocks["x"][i]*tileSize;
-			yCoord = blocks["y"][i]*tileSize;
-
-			context.beginPath();
-			context.rect(xCoord, yCoord, tileSize, tileSize);
-			context.fillStyle = blocks["color"];
-			context.fill();
-			context.drawImage(tileImage, xCoord, yCoord, tileSize, tileSize); // global in here
-		}
+		context.beginPath();
+		context.rect(xCoord, yCoord, tileSize, tileSize);
+		context.fillStyle = color;
+		context.fill();
+		context.drawImage(tileImage, xCoord, yCoord, tileSize, tileSize);
 
 	};
 

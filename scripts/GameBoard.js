@@ -12,7 +12,7 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
   var GameBoard = function(boardContext, pieceContext) {
 		this.speed = 700;
 		this.paused = true;
-		this.blocks = [];
+		this.blockStack = [];
 		this.currentPiece = "";
 		boardCanvas = new Canvas(boardContext, boardWidth, boardHeight);
 		pieceCanvas = new Canvas(pieceContext, boardWidth, boardHeight);
@@ -30,11 +30,7 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 	// ------------------------------------------------------------------------
 
 	GameBoard.prototype.dropPiece = function(action) {
-		if (action === "start") {
-			this.speed = 70;
-		} else {
-			this.speed = 700;
-		}
+		this.speed = (action === "start") ? 70 : 700;
 	};
 
 	// ------------------------------------------------------------------------
@@ -48,9 +44,23 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 	// ------------------------------------------------------------------------
 
 	GameBoard.prototype.drawCurrentPiece = function() {
+
 		var blocks = this.currentPiece.getBlocks();
-		var tileSize = this.currentPiece.getTileSize();
-		pieceCanvas.renderBlocks(blocks, tileSize);
+		var tileSize = this.currentPiece.tileSize;
+		var tileColor = this.currentPiece.tileColor;
+
+		pieceCanvas.clear();
+
+		for (var i = 0; i < 4; i++) {
+			pieceCanvas.renderTile({
+				x: blocks.x[i],
+				y: blocks.y[i],
+				color: tileColor,
+				size: tileSize
+			});
+
+		}
+
 	};
 
 	// ------------------------------------------------------------------------
@@ -105,7 +115,7 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 		var hits = 0;
 		var x = shape[orientation].x;
 		var y = shape[orientation].y;
-		var tileSize = this.currentPiece.getTileSize();
+		var tileSize = this.currentPiece.tileSize;
 		var xCoord, yCoord;
 
 		for (i = 0; i < 4; i++) {
@@ -138,18 +148,27 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 	// ------------------------------------------------------------------------
 
 	GameBoard.prototype.addPiece = function(piece) {
-		console.log("the eagle has landed!");
-		console.log(piece);
 
+		var blocks = piece.getBlocks();
+		var tileSize = piece.tileSize;
+		var tileColor = piece.tileColor;
+		var blockStack = this.blockStack;
 
+		for (var i = 4; i--;) {
+			this.blockStack.push({
+				x: [blocks.x[i]],
+				y: [blocks.y[i]],
+				color: tileColor,
+				size: tileSize
+			});
+		}
 
-		//debugger;
-		// for each block in piece
-/*		this.blocks.push({
-			x: tetriminoBlocks.x[i]+tetrimino.position,
-			y: tetriminoBlocks.y[i]+tetrimino.depth,
-			color: tetrimino.color
-		});*/
+		boardCanvas.clear();
+
+		for (var j = blockStack.length; j--;) {
+			boardCanvas.renderTile(blockStack[j]);
+		}
+
 	};
 
 	// ------------------------------------------------------------------------
