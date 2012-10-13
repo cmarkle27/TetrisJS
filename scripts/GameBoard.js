@@ -9,7 +9,7 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 	// GameBoard constructor
 	// --------------------------------------------------------------------
 
-    var GameBoard = function(boardContext, pieceContext) {
+  var GameBoard = function(boardContext, pieceContext) {
 		this.speed = 700;
 		this.paused = true;
 		this.blocks = [];
@@ -25,6 +25,17 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 		boardCanvas.clear();
 		pieceCanvas.clear();
 		this.paused = false;
+	};
+
+	// ------------------------------------------------------------------------
+
+	GameBoard.prototype.dropPiece = function(action) {
+		console.log("d");
+		if (action === "start") {
+			this.speed = 70;
+		} else {
+			this.speed = 700;
+		}
 	};
 
 	// ------------------------------------------------------------------------
@@ -93,8 +104,8 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 
 		var shape = this.currentPiece.getShape();
 		var hits = 0;
-		var x = shape[orientation]["x"];
-		var y = shape[orientation]["y"];
+		var x = shape[orientation].x;
+		var y = shape[orientation].y;
 		var tileSize = this.currentPiece.getTileSize();
 		var xCoord, yCoord;
 

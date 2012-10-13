@@ -26,9 +26,18 @@ require(["jquery", "GameBoard"], function($, GameBoard) {
 				gameBoard.movePiece("counterclockwise");
 			break;
 
-			// down / speed-up
+			case 40:
+				gameBoard.dropPiece("start");
+			break;
 		}
 	});
+
+	$(document).on('keyup', function(e) {
+		if (e.keyCode === 40) {
+			gameBoard.dropPiece("stop");
+		}
+	});
+
 
 	// ------------------------------------------------------------------------
 
