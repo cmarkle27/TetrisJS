@@ -71,8 +71,8 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 		var pieceDepth = this.currentPiece.depth;
 		var pieceOrientation = this.currentPiece.orientation;
 		var pieceRotations = this.currentPiece.getShape().length;
+		var canMove = false;
 
-		// move the piece
 		if (direction === "left") {
 			piecePosition -= 1;
 		} else if (direction === "right") {
@@ -93,16 +93,19 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 		}
 
 		// check our new location
-		if (this.checkMove(piecePosition, pieceDepth, pieceOrientation)) {
+		canMove = this.checkMove(piecePosition, pieceDepth, pieceOrientation);
+
+		if (canMove) {
 			this.currentPiece.position = piecePosition;
 			this.currentPiece.depth = pieceDepth;
 			this.currentPiece.orientation = pieceOrientation;
 			this.drawCurrentPiece();
-		} else if (direction === "down") {
-			// add the current piece to the board array!!!
-			this.addPiece(this.currentPiece);
-			this.currentPiece = null;
-			this.createPiece();
+		} else {
+			if (direction === "down") {
+				this.addPiece(this.currentPiece);
+				this.currentPiece = null;
+				this.createPiece();
+			}
 		}
 
 	};
@@ -111,8 +114,8 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 
 	GameBoard.prototype.checkMove = function(position, depth, orientation) {
 
-		var shape = this.currentPiece.getShape();
 		var hits = 0;
+		var shape = this.currentPiece.getShape();
 		var x = shape[orientation].x;
 		var y = shape[orientation].y;
 		var tileSize = this.currentPiece.tileSize;
@@ -133,8 +136,9 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 			}
 
 			// hit blocks
-			//hits += this.hitCheck(xCoord, yCoord);
-			//console.log(xCoord, yCoord);
+			if (this.blockCheck(xCoord, yCoord)) {
+				hits += 1;
+			}
 
 		}
 
@@ -156,8 +160,8 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 
 		for (var i = 4; i--;) {
 			this.blockStack.push({
-				x: [blocks.x[i]],
-				y: [blocks.y[i]],
+				x: blocks.x[i],
+				y: blocks.y[i],
 				color: tileColor,
 				size: tileSize
 			});
@@ -167,6 +171,20 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 
 		for (var j = blockStack.length; j--;) {
 			boardCanvas.renderTile(blockStack[j]);
+		}
+
+	};
+
+	// ------------------------------------------------------------------------
+
+	GameBoard.prototype.blockCheck = function(x, y) {
+
+		var blockStack = this.blockStack;
+
+		for (var i = blockStack.length; i--;) {
+			if (blockStack[i].x === x && blockStack[i].y === y) {
+				return true;
+			}
 		}
 
 	};
@@ -184,11 +202,9 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 			}
 
 			this.movePiece("down");
-			console.log("weee!!!");
 		}
 
 		setTimeout(function() {
-			console.log("tick");
 			_this.loop();
 		}, this.speed);
 
