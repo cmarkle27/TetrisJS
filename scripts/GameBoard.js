@@ -135,6 +135,13 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 				hits += 1;
 			}
 
+			console.log(yCoord);
+
+			// hit roof
+/*			if (yCoord === (boardHeight/tileSize)) {
+				hits += 1;
+			}*/
+
 			// hit blocks
 			if (this.blockCheck(xCoord, yCoord)) {
 				hits += 1;
@@ -157,6 +164,7 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 		var tileSize = piece.tileSize;
 		var tileColor = piece.tileColor;
 		var blockStack = this.blockStack;
+		var overflows = 0;
 
 		for (var i = 4; i--;) {
 			this.blockStack.push({
@@ -171,6 +179,13 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 
 		for (var j = blockStack.length; j--;) {
 			boardCanvas.renderTile(blockStack[j]);
+			if (blockStack[j].y < 0) {
+				overflows += 1;
+			}
+		}
+
+		if (overflows) {
+			throw "Fail!!!";
 		}
 
 	};
@@ -193,19 +208,25 @@ define("GameBoard", ["Tetrimino", "Canvas"], function(Tetrimino, Canvas) {
 
 	GameBoard.prototype.loop = function() {
 
-		var _this = this;
+		var self = this;
 
 		if (this.paused === false) {
 
-			if (this.currentPiece === "") {
+			if ( ! this.currentPiece) {
 				this.createPiece();
 			}
 
-			this.movePiece("down");
+			try {
+				this.movePiece("down");
+			} catch(e) {
+				this.paused = true;
+				alert(e);
+			}
+
 		}
 
 		setTimeout(function() {
-			_this.loop();
+			self.loop();
 		}, this.speed);
 
 	};
