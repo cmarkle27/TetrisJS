@@ -121,7 +121,7 @@ function Tetris(options) {
 
     function blockInit() {
         for (var i = 0; i < 20; i++) { // 4 are hidden
-            blockStack [i] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; //12
+            blockStack[i] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; //12
         }
     }
 
@@ -164,13 +164,49 @@ function Tetris(options) {
                 return false;
             }
             blockStack[y][x] = tileColor;
-            renderTile({
-                x: x,
-                y: y,
-                color: tileColor,
-                size: tileSize
-            }, boardCtx);
+            // renderTile({
+            //     x: x,
+            //     y: y,
+            //     color: tileColor,
+            //     size: tileSize
+            // }, boardCtx);
         }
+
+        var lineBlocks;
+        var lineRemovals = [];
+        for (var j = 0; j < 20; j++) {
+            lineBlocks = 0;
+            for (var k = 0; k < 12; k++) {
+                if (blockStack[j][k]) {
+                    lineBlocks += 1;
+                }
+            }
+            if (lineBlocks === 12) {
+                lineRemovals.push(j);
+            }
+        }
+
+        console.log(lineRemovals);
+
+        for (var h = 0; h < lineRemovals.length; h++) {
+                blockStack.splice(lineRemovals[h], 1);
+                blockStack.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        }
+
+        boardCtx.clearRect(0, 0, boardWidth, boardHeight);
+        for (var l = 0; l < 20; l++) {
+            for (var m = 0; m < 12; m++) {
+                if (blockStack[l][m]) {
+                    renderTile({
+                        x: m,
+                        y: l,
+                        color: blockStack[l][m],
+                        size: tileSize
+                    }, boardCtx);
+                }
+            }
+        }
+
 
 
         // for (var i = 0; i < 4; i++) {
@@ -230,10 +266,10 @@ function Tetris(options) {
 
     function loop() {
         if (paused === false) {
-            // console.log('---------------------------------------------------')
-            // for (var i = 0; i < 19; i++) {
-            //     console.log(blockStack[i]);
-            // }
+            console.log('---------------------------------------------------')
+            for (var i = 0; i < 19; i++) {
+                console.log(blockStack[i]);
+            }
             if ( ! movePiece("down")) {
                 if (addPiece()) {
                     createPiece();
