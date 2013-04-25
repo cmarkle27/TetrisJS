@@ -3,15 +3,15 @@
 	<meta charset="utf-8">
 	<title>TetrisJS</title>
 	<link rel="stylesheet" type="text/css" href="styles/main.css">
-	<script data-main="scripts/main.js" src="scripts/require-jquery.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 </head>
 
 <body>
 <div class="wrapper">
 
 	<div class="backboard">
-		<canvas id="piece" width="480" height="600" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
-		<canvas id="board" width="480" height="600" style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+		<canvas id="piece" width="480" height="780" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
+		<canvas id="board" width="480" height="780" style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
 	</div>
 
 	<div class="controls">
@@ -28,5 +28,78 @@
 	</ul>
 
 </div>
+<script src="./Tetrimino.js"></script>
+<script src="./Tetris.js"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+
+    var tetris = new Tetris({
+        pieceContext: $("#piece")[0].getContext("2d"),
+        boardContext: $("#board")[0].getContext("2d")
+    });
+
+    $("#start").on('click', function start(e) {
+        e.preventDefault()
+        var startButton = $(this)
+        var pauseButton = $("#pause")
+        pauseButton.html("Pause Game")
+
+        if (startButton.hasClass("firsties")) {
+
+            startButton
+            .html("New Game")
+            .removeClass("firsties")
+
+            pauseButton
+            .removeClass("disabled")
+            .toggle(function() {
+                pauseButton.html("Resume Game")
+                tetris.pauseGame(true);
+            }, function() {
+                pauseButton.html("Pause Game")
+                tetris.pauseGame(false);
+            })
+        }
+
+        tetris.startGame()
+    });
+
+    $("#options").on('click', function(e) {
+        //...
+    });
+
+    $(document).on('keydown', function(e) {
+        switch (e.keyCode) {
+            case 39:
+            case 68:
+                tetris.movePiece("right")
+            break
+
+            case 37:
+            case 65:
+                tetris.movePiece("left")
+            break
+
+            case 190:
+                tetris.movePiece("clockwise")
+            break
+
+            case 188:
+                tetris.movePiece("counterclockwise")
+            break
+
+            case 40:
+                // tetris.dropPiece("start")
+            break
+        }
+    });
+
+    // $(document).on('keyup', function(e) {
+    //     if (e.keyCode === 40) {
+    //         tetris.dropPiece("stop")
+    //     }
+    // })
+  });
+</script>
 </body>
 </html>

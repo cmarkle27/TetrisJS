@@ -1,4 +1,4 @@
-define("Tetrimino", function() {
+//define("Tetrimino", function() {
 
 	// --------------------------------------------------------------------
 	// Tetrimino constructor
@@ -12,6 +12,8 @@ define("Tetrimino", function() {
 		this.tileColor = this.getColor();
 		this.tileSize = 40;
 	};
+ 	
+
 
 	// ------------------------------------------------------------------------
 
@@ -100,6 +102,6 @@ define("Tetrimino", function() {
 
 	// ------------------------------------------------------------------------
 
-	return Tetrimino;
+	//return Tetrimino;
 
-});
+//});
