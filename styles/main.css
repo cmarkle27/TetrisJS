@@ -33,16 +33,16 @@ body {
 .backboard {
 	position: relative;
 	margin: 20px 20px 10px 20px;
-	/*border: solid 8px #000;*/
-	border: solid 3px #000;
+	border: solid 3px #222;
 	float: left;
 	width: 480px;
-	height: 760px;
+	height: 640px;
 	overflow: hidden;
 	zoom: 1;
 	background-color: #222;
 	background-repeat: no-repeat;
 	background-position: center 80px;
+	box-shadow: 2px 2px 2px #111;
 }
 
 .controls {
@@ -65,15 +65,12 @@ body {
 .instuctions {
 	position: absolute;
 	top: 210px;
-	left: 80px;
+	left: 110px;
 	line-height: 1.5;
 	font-weight: bold;
 	font-size: 18px;
 	color: #444;
-}
-
-.action {
-	/*color: #333;*/
+	z-index: 1;
 }
 
 .game-button {

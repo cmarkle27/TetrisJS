@@ -4,12 +4,15 @@ function Tetris(options) {
     var boardHeight = 760;
     var blockStack = [];
     var currentPiece = null;
+    var nextPiece = null;
     var paused = true;
     var boardCtx = options.boardContext;
     var pieceCtx = options.pieceContext;
-    var speed = options.speed || 400;
+    var speed = options.speed || 500;
     var tileImage = new Image();
 	var thing = new Date();
+    var preview = function(color){};
+    var tempSpeed = speed;
 
     function startGame() {
         boardCtx.clearRect(0, 0, boardWidth, boardHeight);
@@ -19,9 +22,15 @@ function Tetris(options) {
     }
 
     function createPiece() {
-        // we really need to create two pieces, so that we can show the user whats on deck!!!
-        currentPiece = new Tetrimino();
+        stopPiece();
+        currentPiece = nextPiece;
+        nextPiece = new Tetrimino();
+        preview(nextPiece.getColor());
         drawCurrentPiece();
+    }
+
+    function setPreviewAction(func) {
+        preview = func;
     }
 
     function drawCurrentPiece() {
@@ -125,30 +134,6 @@ function Tetris(options) {
         }
     }
 
-    // function removeRow(depth) {
-    //     //var startRow = parseInt(depth, 10) - 1;
-
-    //     for (var i = depth; i--;) {
-    //         if (i === 0) {
-    //             blockStack [i] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; //-4?
-    //         } else {
-    //             blockStack [i] = blockStack [i-1];
-    //         }
-    //     }
-
-
-    //     // if (new_index >= this.length) {
-    //     //     var k = new_index - this.length;
-    //     //     while ((k--) + 1) {
-    //     //         this.push(undefined);
-    //     //     }
-    //     // }
-    //     // this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-    //     //return this; // for testing purposes
-    // }
-
-
-
     // ------------------------------------------------------------------------
 
     function addPiece() {
@@ -164,12 +149,6 @@ function Tetris(options) {
                 return false;
             }
             blockStack[y][x] = tileColor;
-            // renderTile({
-            //     x: x,
-            //     y: y,
-            //     color: tileColor,
-            //     size: tileSize
-            // }, boardCtx);
         }
 
         var lineBlocks;
@@ -186,11 +165,11 @@ function Tetris(options) {
             }
         }
 
-        console.log(lineRemovals);
-
         for (var h = 0; h < lineRemovals.length; h++) {
-                blockStack.splice(lineRemovals[h], 1);
-                blockStack.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            blockStack.splice(lineRemovals[h], 1);
+            blockStack.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            speed *= 0.94;
+            tempSpeed = speed;
         }
 
         boardCtx.clearRect(0, 0, boardWidth, boardHeight);
@@ -207,56 +186,6 @@ function Tetris(options) {
             }
         }
 
-
-
-        // for (var i = 0; i < 4; i++) {
-        //     renderTile({
-        //         x: blocks.x[i],
-        //         y: blocks.y[i],
-        //         color: tileColor,
-        //         size: tileSize
-        //     }, boardCtx);
-        // }
-
-
-
-      // var count = 0;
-      // while(blockStack[j].y ){
-      //     ++count;
-      //     ++i;
-      // }
-
-
-        // hmmmm...
-        // maybe we should be building a multidimential array of colors???
-
-
-        // reset lines
-        //lines = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-
-///////////......
-        // for (var k = blockStack.length; k--;) {
-        //     //lines[parseInt(blockStack[k].y, 10)-1]++;
-        //     //renderTile(blockStack[k], boardCtx);
-        //     if (blockStack[k].y < 0) {
-        //         return false;
-        //     }
-        // }
-///////////......
-
-        // console.log(blockStack);
-        // for (var k = lines.length; k--;) {
-        //     console.log(lines[k]);
-        //     if (lines[k] === 12) {
-        //         for (var l = blockStack.length; l--;) {
-        //             if (blockStack[l+1].y === k) {
-        //                 blockStack.splice(l+1, 1);
-        //             }
-        //         }
-        //     }
-        // }
-
         return true;
     }
 
@@ -266,10 +195,6 @@ function Tetris(options) {
 
     function loop() {
         if (paused === false) {
-            console.log('---------------------------------------------------')
-            for (var i = 0; i < 19; i++) {
-                console.log(blockStack[i]);
-            }
             if ( ! movePiece("down")) {
                 if (addPiece()) {
                     createPiece();
@@ -282,6 +207,15 @@ function Tetris(options) {
         setTimeout(loop, speed);
     }
 
+    function dropPiece() {
+        speed = 10;
+    }
+
+    function stopPiece() {
+        speed = tempSpeed;
+    }
+
+    nextPiece = new Tetrimino();
     tileImage.src = "images/tile.png";
     blockInit();
     loop();
@@ -290,6 +224,8 @@ function Tetris(options) {
     return {
         pauseGame: pauseGame,
         startGame: startGame,
-        movePiece: movePiece
+        movePiece: movePiece,
+        dropPiece: dropPiece,
+        setPreviewAction: setPreviewAction
     }
 }

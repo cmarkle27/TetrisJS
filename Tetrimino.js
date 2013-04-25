@@ -65,13 +65,13 @@ Tetrimino.prototype.getShape = function() {
 Tetrimino.prototype.getColor = function() {
 
     var colors = {
-        j: "#cc0000",
-        o: "#cccccc",
-        i: "#ffff33",
-        l: "#33cc00",
-        s: "#666666",
-        z: "#3333ff",
-        t: "#339900"
+        j: "#ff8000", //#cc0000 red //#ddddbb pale?
+        o: "#ffff33", //#33cc00
+        i: "#cccccc", //#ffff33
+        l: "#3333dd",
+        s: "#339900", //3333ff
+        z: "#cc0000", //"#3333ff"
+        t: "#666666" //#339900
     };
 
     return colors[this.shape];
