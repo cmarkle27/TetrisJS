@@ -22,7 +22,7 @@ function Tetris(options) {
     }
 
     function createPiece() {
-        stopPiece();
+        stopQuickDrop();
         currentPiece = nextPiece;
         nextPiece = new Tetrimino();
         preview(nextPiece.getColor());
@@ -161,6 +161,7 @@ function Tetris(options) {
                 }
             }
             if (lineBlocks === 12) {
+                stopQuickDrop();
                 lineRemovals.push(j);
             }
         }
@@ -207,16 +208,16 @@ function Tetris(options) {
         setTimeout(loop, speed);
     }
 
-    function dropPiece() {
+    function quickDrop() {
         speed = 10;
     }
 
-    function stopPiece() {
+    function stopQuickDrop() {
         speed = tempSpeed;
     }
 
     nextPiece = new Tetrimino();
-    tileImage.src = "images/tile.png";
+    tileImage.src = "img/tile.png";
     blockInit();
     loop();
 
@@ -225,7 +226,7 @@ function Tetris(options) {
         pauseGame: pauseGame,
         startGame: startGame,
         movePiece: movePiece,
-        dropPiece: dropPiece,
+        quickDrop: quickDrop,
         setPreviewAction: setPreviewAction
     }
 }

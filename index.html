@@ -2,8 +2,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>TetrisJS</title>
-	<link rel="stylesheet" type="text/css" href="styles/main.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 
 <body>
@@ -17,10 +16,10 @@
 	<div class="controls">
 		<a id="start" class="game-button firsties">Start Game</a>
 		<a id="pause" class="game-button disabled">Pause Game</a>
-		<a id="options" class="game-button">Options</a>
+		<a id="options" class="game-button disabled">Options</a>
 	</div>
 
-	<img class="logo" src="images/LogoType.png">
+	<img class="logo" src="img/LogoType.png">
 
 	<ul class="instuctions">
         <li><pre>Move         -   Arrow Keys</pre></li>
@@ -29,81 +28,9 @@
 	</ul>
 
 </div>
-<script src="./Tetrimino.js"></script>
-<script src="./Tetris.js"></script>
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-
-    var tetris;
-    var backboard = $(".backboard");
-
-    $("#start").on('click', function start(e) {
-        e.preventDefault()
-        var startButton = $(this)
-        var pauseButton = $("#pause")
-        pauseButton.html("Pause Game")
-
-        tetris = new Tetris({
-            pieceContext: $("#piece")[0].getContext("2d"),
-            boardContext: $("#board")[0].getContext("2d")
-        });
-
-        tetris.setPreviewAction(function(color) {
-            backboard.css("borderColor", color);
-        });
-
-        if (startButton.hasClass("firsties")) {
-
-            startButton
-            .html("New Game")
-            .removeClass("firsties")
-
-            pauseButton
-            .removeClass("disabled")
-            .toggle(function() {
-                pauseButton.html("Resume Game")
-                tetris.pauseGame(true);
-            }, function() {
-                pauseButton.html("Pause Game")
-                tetris.pauseGame(false);
-            })
-        }
-
-        tetris.startGame()
-    });
-
-    $("#options").on('click', function(e) {
-        //...
-    });
-
-    $(document).on('keydown', function(e) {
-        // if object
-        switch (e.keyCode) {
-            case 39:
-            case 68:
-                tetris.movePiece("right")
-            break
-
-            case 37:
-            case 65:
-                tetris.movePiece("left")
-            break
-
-            case 190:
-                tetris.movePiece("clockwise")
-            break
-
-            case 188:
-                tetris.movePiece("counterclockwise")
-            break
-
-            case 32:
-                tetris.dropPiece();
-            break
-        }
-    });
-
-});
-</script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/Tetrimino.js"></script>
+<script src="./js/Tetris.js"></script>
+<script src="./js/Game.js"></script>
 </body>
 </html>
