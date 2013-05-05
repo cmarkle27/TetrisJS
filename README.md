@@ -2,8 +2,6 @@
 
 This is a clone of the classic Tetris game.
 
-###Authors
+###Demo
 
-* Chris Markle
-
-* Jeff Neville
+http://markle976.github.io/TetrisJS/
